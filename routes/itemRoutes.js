@@ -3,7 +3,7 @@ import Item from "../models/Item.js";
 
 const router = express.Router();
 
-// CREATE ITEM
+// CREATE ITEM BY POST
 router.post("/", async (req, res) => {
   try {
     const item = new Item(req.body);
@@ -16,7 +16,7 @@ router.post("/", async (req, res) => {
   }
 });
 
-// SEARCH
+// SEARCH BY SEARCH ITEM BUTTON
 router.get("/search", async (req, res) => {
   try {
     const searchTerm = req.query.q;
@@ -39,7 +39,7 @@ router.get("/search", async (req, res) => {
   }
 });
 
-// FIND ITEM
+// SEARCH BY SEARCH ALL BUTTON
 router.get("/", async (req, res) => {
   try {
     const items = await Item.find();
@@ -51,7 +51,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-// FIND AND UPDATE ITEM BY ID
+// UPDATE MODAL AND UPDATE BUTTON
 router.put("/:id", async (req, res) => {
   try {
     const item = await Item.findByIdAndUpdate(req.params.id, req.body, {
@@ -68,7 +68,7 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// FIND AND DELETE ITEM BY ID
+// DELETE BUTTON
 router.delete("/:id", async (req, res) => {
   try {
     const item = await Item.findByIdAndDelete(req.params.id);
