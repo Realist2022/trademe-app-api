@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Boots",
+    "description": "Toe jams",
+    "start_price": 20,
+    "reserve_price": 1
+  },
+  {
+    "title": "Antique Pocket Watch",
+    "description": "A silver-plated timepiece from the early 20th century. Still works!",
+    "start_price": 75,
+    "reserve_price": 200
+  },
+  {
+    "title": "Signed First Edition Book",
+    "description": "A rare, signed copy of a classic novel.",
+    "start_price": 100,
+    "reserve_price": 500
+  }
+]
