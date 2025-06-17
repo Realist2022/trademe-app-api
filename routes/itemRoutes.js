@@ -51,21 +51,6 @@ router.get("/", async (req, res) => {
   }
 });
 
-// FIND ITEM BY ID
-router.get("/:id", async (req, res) => {
-  try {
-    const item = await Item.findById(req.params.id);
-    if (!item) {
-      return res.status(404).json({ message: "Item not found" });
-    }
-    res.json(item);
-  } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error fetching item", error: error.message });
-  }
-});
-
 // FIND AND UPDATE ITEM BY ID
 router.put("/:id", async (req, res) => {
   try {
