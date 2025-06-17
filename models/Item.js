@@ -18,6 +18,9 @@ const itemSchema = new mongoose.Schema({
   },
 });
 
+// INDEX SEARCH
+itemSchema.index({ title: "text", description: "text" });
+
 const Item = mongoose.model("Item", itemSchema);
 
 export default Item;

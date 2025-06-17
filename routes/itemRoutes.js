@@ -21,32 +21,21 @@ router.get("/search", async (req, res) => {
   try {
     const searchTerm = req.query.q;
     if (!searchTerm) {
-      return res
-        .status(400)
-        .json({
-          message: 'A search term is required. Use the "q" query parameter.',
-        });
+      return res.status(400).json({
+        message: 'A search term is required. Use the "q" query parameter.',
+      });
     }
 
-    const searchRegex = new RegExp(searchTerm, "i");
     const items = await Item.find({
-      $or: [
-        { title: { $regex: searchRegex } },
-        { description: { $regex: searchRegex } },
-      ],
+      $text: { $search: searchTerm },
     });
-
-    if (items.length === 0) {
-      return res
-        .status(404)
-        .json({ message: "No items found matching your search criteria." });
-    }
 
     res.json(items);
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error searching for items", error: error.message });
+    res.status(500).json({
+      message: "Error searching for items",
+      error: error.message,
+    });
   }
 });
 
