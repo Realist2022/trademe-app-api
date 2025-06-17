@@ -1,52 +1,111 @@
-import express from 'express';
-import Item from '../models/Item.js';
+import express from "express";
+import Item from "../models/Item.js";
 
 const router = express.Router();
 
 // CREATE ITEM
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const item = new Item(req.body);
     await item.save();
-    res.status(201).json(item); 
+    res.status(201).json(item);
   } catch (error) {
-    res.status(400).json({ message: 'Error creating item', error: error.message });
+    res
+      .status(400)
+      .json({ message: "Error creating item", error: error.message });
   }
 });
 
-// READ ALL ITEMS
-router.get('/', async (req, res) => {
+// SEARCH
+router.get("/search", async (req, res) => {
+  try {
+    const searchTerm = req.query.q;
+    if (!searchTerm) {
+      return res
+        .status(400)
+        .json({
+          message: 'A search term is required. Use the "q" query parameter.',
+        });
+    }
+
+    const searchRegex = new RegExp(searchTerm, "i");
+    const items = await Item.find({
+      $or: [
+        { title: { $regex: searchRegex } },
+        { description: { $regex: searchRegex } },
+      ],
+    });
+
+    if (items.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No items found matching your search criteria." });
+    }
+
+    res.json(items);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error searching for items", error: error.message });
+  }
+});
+
+// FIND ITEM
+router.get("/", async (req, res) => {
   try {
     const items = await Item.find();
     res.json(items);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching items', error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error fetching items", error: error.message });
   }
 });
 
-// UPDATE ITEM
-router.put('/:id', async (req, res) => {
+// FIND ITEM BY ID
+router.get("/:id", async (req, res) => {
   try {
-    const item = await Item.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const item = await Item.findById(req.params.id);
     if (!item) {
-      return res.status(404).json({ message: 'Item not found' });
+      return res.status(404).json({ message: "Item not found" });
     }
     res.json(item);
   } catch (error) {
-    res.status(400).json({ message: 'Error updating item', error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error fetching item", error: error.message });
   }
 });
 
-// DELETE ITEM
-router.delete('/:id', async (req, res) => {
+// FIND AND UPDATE ITEM BY ID
+router.put("/:id", async (req, res) => {
+  try {
+    const item = await Item.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    if (!item) {
+      return res.status(404).json({ message: "Item not found" });
+    }
+    res.json(item);
+  } catch (error) {
+    res
+      .status(400)
+      .json({ message: "Error updating item", error: error.message });
+  }
+});
+
+// FIND AND DELETE ITEM BY ID
+router.delete("/:id", async (req, res) => {
   try {
     const item = await Item.findByIdAndDelete(req.params.id);
-     if (!item) {
-      return res.status(404).json({ message: 'Item not found' });
+    if (!item) {
+      return res.status(404).json({ message: "Item not found" });
     }
-    res.json({ message: 'Item deleted successfully' });
+    res.json({ message: "Item deleted successfully" });
   } catch (error) {
-    res.status(500).json({ message: 'Error deleting item', error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error deleting item", error: error.message });
   }
 });
 

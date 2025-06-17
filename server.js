@@ -3,11 +3,14 @@ import connectDB from './db.js';
 import itemRoutes from './routes/itemRoutes.js';
 import figlet from 'figlet';
 import dotenv from 'dotenv';
+import cors from 'cors';
 
 dotenv.config();
 connectDB();
 
 const app = express();
+
+app.use(cors());
 app.use(express.json());
 app.use('/api/items', itemRoutes);
 

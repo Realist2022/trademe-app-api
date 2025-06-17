@@ -51,7 +51,7 @@ program
     process.exit();
   });
 
-// UPDATED: List command now displays the new fields
+// LIST ITEMS
 program
   .command("list")
   .description("List all items")
@@ -77,7 +77,7 @@ program
     process.exit();
   });
 
-// UPDATED: Add command now prompts for the new fields
+// ADD ITEMS
 program
   .command("add")
   .description("Add a new item")
